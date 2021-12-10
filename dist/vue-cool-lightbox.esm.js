@@ -542,7 +542,9 @@ var script = {
   methods: {
     Download: function Download() {
       var imageSrc = this.getItemSrc(this.imgIndex);
-      fetch(imageSrc).then(function (image) {
+      fetch(imageSrc, {
+        credentials: 'include',
+      }).then(function (image) {
         image.blob().then(function (imageBlob) {
           var imageURL = URL.createObjectURL(imageBlog);
           var link = document.createElement('a');

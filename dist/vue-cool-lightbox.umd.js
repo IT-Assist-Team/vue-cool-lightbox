@@ -546,7 +546,9 @@
     methods: {
       Download: function Download() {
         var imageSrc = this.getItemSrc(this.imgIndex);
-        fetch(imageSrc).then(function (image) {
+        fetch(imageSrc, {
+          credentials: 'include',
+        }).then(function (image) {
           image.blob().then(function (imageBlob) {
             var imageURL = URL.createObjectURL(imageBlog);
             var link = document.createElement('a');
@@ -1814,7 +1816,7 @@
     /* scoped */
     var __vue_scope_id__ = undefined;
     /* module identifier */
-    var __vue_module_identifier__ = "data-v-df8a7b2c";
+    var __vue_module_identifier__ = "data-v-2f630d2e";
     /* functional template */
     var __vue_is_functional_template__ = false;
     /* style inject */

@@ -766,7 +766,9 @@ export default {
   methods: {
     Download() {
       const imageSrc = this.getItemSrc(this.imgIndex)
-      fetch(imageSrc).then(image => {
+      fetch(imageSrc, {
+        credentials: 'include',
+      }).then(image => {
         image.blob().then(imageBlob => {
           const imageURL = URL.createObjectURL(imageBlog)
           const link = document.createElement('a')
