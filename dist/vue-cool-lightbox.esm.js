@@ -545,8 +545,9 @@ var script = {
       var imageSrc = this.getItemSrc(this.imgIndex);
       axios.get(imageSrc, {
         withCredentials: true,
+        responseType: 'arraybuffer'
       }).then(function (image) {
-        image.blob().then(function (imageBlob) {
+          var imageBlob = Buffer.from(image.data, 'binary').toString('base64');
           var imageURL = URL.createObjectURL(imageBlob);
           var link = document.createElement('a');
           link.href = imageURL;
@@ -554,7 +555,7 @@ var script = {
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
-        });
+        
       });
     },
     getExtFromItem: function getExtFromItem(imgIndex) {
