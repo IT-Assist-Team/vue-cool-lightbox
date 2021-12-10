@@ -547,7 +547,7 @@ var script = {
         withCredentials: true,
       }).then(function (image) {
         image.blob().then(function (imageBlob) {
-          var imageURL = URL.createObjectURL(imageBlog);
+          var imageURL = URL.createObjectURL(imageBlob);
           var link = document.createElement('a');
           link.href = imageURL;
           link.download = 'image file name here';

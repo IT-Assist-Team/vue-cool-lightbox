@@ -771,7 +771,7 @@ export default {
         withCredentials: true,
       }).then(image => {
         image.blob().then(imageBlob => {
-          const imageURL = URL.createObjectURL(imageBlog)
+          const imageURL = URL.createObjectURL(imageBlob)
           const link = document.createElement('a')
           link.href = imageURL
           link.download = 'image file name here'
