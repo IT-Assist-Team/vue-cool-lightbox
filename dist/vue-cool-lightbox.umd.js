@@ -1,8 +1,10 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('body-scroll-lock')) :
-  typeof define === 'function' && define.amd ? define(['exports', 'body-scroll-lock'], factory) :
-  (global = global || self, factory(global.CoolLightBox = {}, global.bodyScrollLock));
-}(this, (function (exports, bodyScrollLock) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('body-scroll-lock'), require('axios')) :
+  typeof define === 'function' && define.amd ? define(['exports', 'body-scroll-lock', 'axios'], factory) :
+  (global = global || self, factory(global.CoolLightBox = {}, global.bodyScrollLock, global.axios));
+}(this, (function (exports, bodyScrollLock, axios) { 'use strict';
+
+  axios = axios && axios.hasOwnProperty('default') ? axios['default'] : axios;
 
   var attributes = ['media', 'srcset', 'sizes', 'src'];
 
@@ -546,8 +548,8 @@
     methods: {
       Download: function Download() {
         var imageSrc = this.getItemSrc(this.imgIndex);
-        fetch(imageSrc, {
-          credentials: 'include',
+        axios.get(imageSrc, {
+          withCredentials: true,
         }).then(function (image) {
           image.blob().then(function (imageBlob) {
             var imageURL = URL.createObjectURL(imageBlog);
@@ -1816,7 +1818,7 @@
     /* scoped */
     var __vue_scope_id__ = undefined;
     /* module identifier */
-    var __vue_module_identifier__ = "data-v-2f630d2e";
+    var __vue_module_identifier__ = "data-v-2712f205";
     /* functional template */
     var __vue_is_functional_template__ = false;
     /* style inject */

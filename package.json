@@ -31,6 +31,7 @@
   },
   "homepage": "https://vue-cool-lightbox.lucaspulliese.com",
   "dependencies": {
+    "axios": "^0.24.0",
     "body-scroll-lock": "^3.1.5",
     "plyr": "^3.6.7",
     "vue": "^2.6.10"

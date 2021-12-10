@@ -370,6 +370,7 @@
 import LazyLoadDirective from "../directives/LazyLoad";
 import AutoplayObserver from "../directives/AutoplayObserver";
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
+import axios from "axios";
 
 export default {
   directives: {
@@ -766,8 +767,8 @@ export default {
   methods: {
     Download() {
       const imageSrc = this.getItemSrc(this.imgIndex)
-      fetch(imageSrc, {
-        credentials: 'include',
+      axios.get(imageSrc, {
+        withCredentials: true,
       }).then(image => {
         image.blob().then(imageBlob => {
           const imageURL = URL.createObjectURL(imageBlog)

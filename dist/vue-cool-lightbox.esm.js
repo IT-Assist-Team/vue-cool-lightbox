@@ -1,4 +1,5 @@
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
+import axios from 'axios';
 
 var attributes = ['media', 'srcset', 'sizes', 'src'];
 
@@ -542,8 +543,8 @@ var script = {
   methods: {
     Download: function Download() {
       var imageSrc = this.getItemSrc(this.imgIndex);
-      fetch(imageSrc, {
-        credentials: 'include',
+      axios.get(imageSrc, {
+        withCredentials: true,
       }).then(function (image) {
         image.blob().then(function (imageBlob) {
           var imageURL = URL.createObjectURL(imageBlog);
