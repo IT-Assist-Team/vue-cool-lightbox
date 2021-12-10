@@ -769,8 +769,9 @@ export default {
       const imageSrc = this.getItemSrc(this.imgIndex)
       axios.get(imageSrc, {
         withCredentials: true,
+        responseType: 'arraybuffer'
       }).then(image => {
-        image.blob().then(imageBlob => {
+          const imageBlob = Buffer.from(image.data, 'binary').toString('base64')
           const imageURL = URL.createObjectURL(imageBlob)
           const link = document.createElement('a')
           link.href = imageURL
@@ -778,7 +779,7 @@ export default {
           document.body.appendChild(link)
           link.click()
           document.body.removeChild(link)
-        })
+        
       })
     },
     getExtFromItem(imgIndex) {
