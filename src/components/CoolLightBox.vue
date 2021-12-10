@@ -769,17 +769,20 @@ export default {
       const imageSrc = this.getItemSrc(this.imgIndex)
       axios.get(imageSrc, {
         withCredentials: true,
-        responseType: 'arraybuffer'
-      }).then(image => {
-          const imageBlob = Buffer.from(image.data, 'binary').toString('base64')
-          const imageURL = URL.createObjectURL(imageBlob)
-          const link = document.createElement('a')
-          link.href = imageURL
-          link.download = 'image file name here'
-          document.body.appendChild(link)
-          link.click()
-          document.body.removeChild(link)
-        
+        responseType: 'blob'
+      }).then(response => {
+          var reader = new window.FileReader();
+          reader.readAsDataURL(response.data); 
+          reader.onload = function() {
+            var imageDataUrl = reader.result;
+            console.log(imageDataUrl)
+            const link = document.createElement('a')
+            link.href = imageDataUrl
+            link.download = 'image file name here'
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+          }
       })
     },
     getExtFromItem(imgIndex) {
