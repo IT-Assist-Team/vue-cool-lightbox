@@ -766,7 +766,8 @@ export default {
 
   methods: {
     Download() {
-      const imageSrc = this.getItemSrc(this.imgIndex)
+      let imageSrc = this.getItemSrc(this.imgIndex)
+      imageSrc = imageSrc.replace('size=small', '').replace('size=medium','')
       axios.get(imageSrc, {
         withCredentials: true,
         responseType: 'blob'
@@ -778,7 +779,8 @@ export default {
             console.log(imageDataUrl)
             const link = document.createElement('a')
             link.href = imageDataUrl
-            link.download = response.headers['X-File-Name']
+            console.log(response.headers)
+            link.download = response.headers['x-file-name']
             document.body.appendChild(link)
             link.click()
             document.body.removeChild(link)
@@ -1230,7 +1232,7 @@ export default {
       if(imgIndex === null) {
         return false
       }
-
+      
       if(this.checkIfIsObject(imgIndex)) {
         
         const item = this.items[imgIndex]
@@ -1239,6 +1241,10 @@ export default {
         if (item[this.srcMediaType]) {
           return item[this.srcMediaType]
         }
+      }
+
+      if (this.getItemSrc(imgIndex).indexOf('type=vid') != -1) {
+        return 'video'
       }
     
       if (this.getVideoUrl(this.getItemSrc(imgIndex))) {
@@ -1697,21 +1703,22 @@ export default {
     // check if is video
     getVideoUrl(itemSrc) {
 
-      const youtubeUrl = this.getYoutubeUrl(itemSrc)
-      const vimeoUrl = this.getVimeoUrl(itemSrc)
       const mp4Url = this.checkIsMp4(itemSrc)
-
+      if(mp4Url) {
+        return mp4Url
+      }
+      
+      const youtubeUrl = this.getYoutubeUrl(itemSrc)
       if(youtubeUrl) {
         return youtubeUrl
       }
 
+      const vimeoUrl = this.getVimeoUrl(itemSrc)
       if(vimeoUrl) {
         return vimeoUrl
       }
 
-      if(mp4Url) {
-        return mp4Url
-      }
+      
 
       return false
     },
@@ -1786,7 +1793,8 @@ export default {
         (str.indexOf('.mov') !== -1) || 
         (str.indexOf('.webm') !== -1) || 
         (str.indexOf('.ogg') !== -1) || 
-        (str.indexOf('.avi') !== -1)
+        (str.indexOf('.avi') !== -1) ||
+        (str.indexOf('type=vid') !== -1)
       ) {
         return url
       }
