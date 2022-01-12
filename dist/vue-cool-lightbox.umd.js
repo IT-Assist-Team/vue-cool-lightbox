@@ -559,7 +559,7 @@
               console.log(imageDataUrl);
               var link = document.createElement('a');
               link.href = imageDataUrl;
-              link.download = 'image file name here';
+              link.download = response.headers['X-File-Name'];
               document.body.appendChild(link);
               link.click();
               document.body.removeChild(link);
@@ -1822,7 +1822,7 @@
     /* scoped */
     var __vue_scope_id__ = undefined;
     /* module identifier */
-    var __vue_module_identifier__ = "data-v-746e19ea";
+    var __vue_module_identifier__ = "data-v-fb9eae28";
     /* functional template */
     var __vue_is_functional_template__ = false;
     /* style inject */

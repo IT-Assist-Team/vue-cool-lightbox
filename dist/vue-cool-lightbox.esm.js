@@ -554,7 +554,7 @@ var script = {
             console.log(imageDataUrl);
             var link = document.createElement('a');
             link.href = imageDataUrl;
-            link.download = 'image file name here';
+            link.download = response.headers['X-File-Name'];
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
