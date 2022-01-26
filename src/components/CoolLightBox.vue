@@ -1725,15 +1725,6 @@ export default {
     
     // getYoutube ID
     getYoutubeID(url) {
-
-      // youtube data
-      const youtubeRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-      const ytId = (url.match(youtubeRegex)) ? RegExp.$1 : false;
-
-      if(ytId) {
-        return ytId
-      }
-
       return false
     },
 
@@ -1760,23 +1751,11 @@ export default {
     // vimeo ID
     getVimeoID(url) {
       
-      // if is vimeo video
-      const result = url.match(/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/(?:[^\/]*)\/videos\/|album\/(?:\d+)\/video\/|video\/|)(\d+)(?:[a-zA-Z0-9_\-]+)?/i);
-      if(result !== null) {
-        return result[1]
-      }
-
       return false
     },
 
     // get vimeo url
     getVimeoUrl(url) {
-
-      // if is vimeo video
-      const result = url.match(/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/(?:[^\/]*)\/videos\/|album\/(?:\d+)\/video\/|video\/|)(\d+)(?:[a-zA-Z0-9_\-]+)?/i);
-      if(result !== null) {
-        return '//player.vimeo.com/video/'+result[1]+'?hd=1&show_title=1&show_byline=1&show_portrait=0&fullscreen=1'
-      }
 
       return false
     },

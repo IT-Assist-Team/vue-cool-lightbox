@@ -1507,15 +1507,6 @@
       
       // getYoutube ID
       getYoutubeID: function getYoutubeID(url) {
-
-        // youtube data
-        var youtubeRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-        var ytId = (url.match(youtubeRegex)) ? RegExp.$1 : false;
-
-        if(ytId) {
-          return ytId
-        }
-
         return false
       },
 
@@ -1542,23 +1533,11 @@
       // vimeo ID
       getVimeoID: function getVimeoID(url) {
         
-        // if is vimeo video
-        var result = url.match(/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/(?:[^\/]*)\/videos\/|album\/(?:\d+)\/video\/|video\/|)(\d+)(?:[a-zA-Z0-9_\-]+)?/i);
-        if(result !== null) {
-          return result[1]
-        }
-
         return false
       },
 
       // get vimeo url
       getVimeoUrl: function getVimeoUrl(url) {
-
-        // if is vimeo video
-        var result = url.match(/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/(?:[^\/]*)\/videos\/|album\/(?:\d+)\/video\/|video\/|)(\d+)(?:[a-zA-Z0-9_\-]+)?/i);
-        if(result !== null) {
-          return '//player.vimeo.com/video/'+result[1]+'?hd=1&show_title=1&show_byline=1&show_portrait=0&fullscreen=1'
-        }
 
         return false
       },
@@ -1830,7 +1809,7 @@
     /* scoped */
     var __vue_scope_id__ = undefined;
     /* module identifier */
-    var __vue_module_identifier__ = "data-v-26b9319f";
+    var __vue_module_identifier__ = "data-v-7d1de950";
     /* functional template */
     var __vue_is_functional_template__ = false;
     /* style inject */
