@@ -52,7 +52,7 @@
             class="cool-lightbox__slide"
             :class="{ 'cool-lightbox__slide--current': itemIndex === imgIndex }"
           >
-            <div v-if="itemIndex === imgIndex">
+            <div v-if="itemIndex === imgIndex" style="margin-left: auto; margin-right: auto;">
               <div 
                   v-lazyload
                   v-if="getMediaType(itemIndex) === 'image'" key="image" :style="imgWrapperStyle" class="cool-lightbox__slide__img">
@@ -103,7 +103,8 @@
                   :src="getVideoUrl(getItemSrc(itemIndex))" 
                   v-if="(!checkIsMp4(getItemSrc(itemIndex)) && getMediaType(itemIndex) === 'video')" 
                   :style="aspectRatioVideo" 
-                  :key="itemIndex" 
+                  :key="itemIndex"
+                  style="width: 100%;max-height: 70vh;"
                   frameborder="0" 
                   allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
                   allowfullscreen>
@@ -125,6 +126,7 @@
                   v-if="checkIsMp4(getItemSrc(itemIndex)) || getMediaType(itemIndex) === 'webVideo'" 
                   :style="aspectRatioVideo" :key="checkIsMp4(getItemSrc(itemIndex))" 
                   controls="" 
+                  style="width: 100%;max-height: 70vh;"
                   controlslist="nodownload" l
                   poster="">
                   <source :src="checkIsMp4(getItemSrc(itemIndex))" :type="'video/'+(getVideoExt(getItemSrc(itemIndex)) ? getVideoExt(getItemSrc(itemIndex)) : getExtFromItem(itemIndex))">
