@@ -101,8 +101,7 @@
                   v-autoplayObserver
                   :data-autoplay="setAutoplay(itemIndex)"
                   :src="getVideoUrl(getItemSrc(itemIndex))" 
-                  v-if="(!checkIsMp4(getItemSrc(itemIndex)) && getMediaType(itemIndex) === 'video')" 
-                  :style="aspectRatioVideo" 
+                  v-if="(!checkIsMp4(getItemSrc(itemIndex)) && getMediaType(itemIndex) === 'video')"
                   :key="itemIndex"
                   style="width: 100%;max-height: 70vh;"
                   frameborder="0" 
@@ -124,7 +123,7 @@
                   :data-autoplay="setAutoplay(itemIndex)"
                   class="cool-lightbox-video" 
                   v-if="checkIsMp4(getItemSrc(itemIndex)) || getMediaType(itemIndex) === 'webVideo'" 
-                  :style="aspectRatioVideo" :key="checkIsMp4(getItemSrc(itemIndex))" 
+                  :key="checkIsMp4(getItemSrc(itemIndex))" 
                   controls="" 
                   style="width: 100%;max-height: 70vh;"
                   controlslist="nodownload" l
@@ -199,8 +198,7 @@
                       v-autoplayObserver
                       :data-autoplay="setAutoplay(imgIndex)"
                       :src="getVideoUrl(getItemSrc(imgIndex))" 
-                      v-if="(!checkIsMp4(getItemSrc(imgIndex)) && getMediaType(imgIndex) === 'video')" 
-                      :style="aspectRatioVideo" 
+                      v-if="(!checkIsMp4(getItemSrc(imgIndex)) && getMediaType(imgIndex) === 'video')"
                       :key="getVideoUrl(getItemSrc(imgIndex))" 
                       frameborder="0" 
                       allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
@@ -221,7 +219,7 @@
                       v-autoplayObserver
                       :data-autoplay="setAutoplay(imgIndex)"
                       v-if="checkIsMp4(getItemSrc(imgIndex)) || getMediaType(imgIndex) === 'webVideo'" 
-                      :style="aspectRatioVideo" :key="checkIsMp4(getItemSrc(imgIndex))" 
+                      :key="checkIsMp4(getItemSrc(imgIndex))" 
                       controls="" 
                       controlslist="nodownload" 
                       style="width: 100%;max-height: 70vh;"
@@ -344,12 +342,6 @@ export default {
       imageLoading: false,
       showThumbs: false,
       isFullScreenMode: false,
-
-      // aspect ratio videos
-      aspectRatioVideo: {
-        width: 'auto',
-        height: 'auto',
-      },
 
       // props to bind styles
       buttonsVisible: true,
@@ -658,15 +650,6 @@ export default {
           // add caption padding to Lightbox wrapper
           this.addCaptionPadding()
           
-          // setAspectRatioVideo when is swipe
-          if(this.effect === 'swipe') {
-            this.setAspectRatioVideo();
-          } else {
-
-            if(this.getVideoUrl(this.getItemSrc(prev))) {
-              this.setAspectRatioVideo();
-            }
-          }
         }
 
       })
@@ -1061,38 +1044,7 @@ export default {
       // mouse left btn click
       return button === 0
     },
-
   
-    // Aspect Ratio responsive video
-    setAspectRatioVideo() {
-      const thisContext = this
-      let el = document.getElementsByClassName('cool-lightbox__inner');
-      el = el[0]
-
-      let computedStyle = getComputedStyle(el)
-      if(window.innerWidth < 1440) {
-
-        let width = el.clientWidth;
-        let height = Math.round((width/16)*9);
-
-        this.aspectRatioVideo.height = height+'px'
-        this.aspectRatioVideo.width = width+'px'
-
-      } else {
-        
-        setTimeout(function() {
-          let height = el.clientHeight;
-          height -= parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.paddingBottom);
-
-          let width = (height/9)*16;
-
-          thisContext.aspectRatioVideo.height = height+'px'
-          thisContext.aspectRatioVideo.width = width+'px'
-        }, 150)
-
-      }
-    },
-
     // close event
     close() {
       this.stopSlideShow();
@@ -1477,7 +1429,7 @@ export default {
     },
   },
   mounted() {
-    console.log('Init Cool Lightbox! V2.1')
+    console.log('Init Cool Lightbox! V2.3')
   },
 };
 </script>
