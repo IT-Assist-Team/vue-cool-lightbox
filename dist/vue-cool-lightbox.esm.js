@@ -1316,7 +1316,7 @@ var script = {
     },
   },
   mounted: function mounted() {
-    console.log('Init Cool Lightbox! V2.0');
+    console.log('Init Cool Lightbox! V2.1');
   },
 };
 
