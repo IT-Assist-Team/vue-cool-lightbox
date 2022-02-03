@@ -143,92 +143,96 @@
             ref="items"
             class="cool-lightbox__slide cool-lightbox__slide--current"
           >
-            <transition name="cool-lightbox-slide-change" mode="out-in">
-              <div v-if="getMediaType(imgIndex) === 'image'" key="image" :style="imgWrapperStyle" class="cool-lightbox__slide__img">
-                <transition name="cool-lightbox-slide-change" mode="out-in" v-if="!isItemPicture(imgIndex)">
-                  <img
-                      :src="getItemSrc(imgIndex)"
-                      :srcset="getItemSrcSet(imgIndex)"
-                      :sizes="getItemSizes(imgIndex)"
-                      :key="imgIndex"
-                      draggable="false"
-                      :alt="getItemAlt(imgIndex)"
-
-                      @load="imageLoaded"
-                  />
-                </transition>
-                <transition v-else name="cool-lightbox-slide-change" mode="out-in">
-                  <picture :key="imgIndex">
-                    <source
-                        v-for="(source, sourceIndex) in getPictureSources(imgIndex)"
-                        :srcset="source.srcset"
-                        :type="source.type"
-                        :media="source.media"
-                        :sizes="source.sizes || getItemSizes(imgIndex)"
-                        :key="`source-${imgIndex}-${sourceIndex}`"
-                    >
+            <div style="margin-left: auto; margin-right: auto;">
+              <transition name="cool-lightbox-slide-change" mode="out-in">
+                <div v-if="getMediaType(imgIndex) === 'image'" key="image" :style="imgWrapperStyle" class="cool-lightbox__slide__img">
+                  <transition name="cool-lightbox-slide-change" mode="out-in" v-if="!isItemPicture(imgIndex)">
                     <img
                         :src="getItemSrc(imgIndex)"
                         :srcset="getItemSrcSet(imgIndex)"
                         :sizes="getItemSizes(imgIndex)"
+                        :key="imgIndex"
                         draggable="false"
                         :alt="getItemAlt(imgIndex)"
 
                         @load="imageLoaded"
                     />
-                  </picture>
-                </transition>
+                  </transition>
+                  <transition v-else name="cool-lightbox-slide-change" mode="out-in">
+                    <picture :key="imgIndex">
+                      <source
+                          v-for="(source, sourceIndex) in getPictureSources(imgIndex)"
+                          :srcset="source.srcset"
+                          :type="source.type"
+                          :media="source.media"
+                          :sizes="source.sizes || getItemSizes(imgIndex)"
+                          :key="`source-${imgIndex}-${sourceIndex}`"
+                      >
+                      <img
+                          :src="getItemSrc(imgIndex)"
+                          :srcset="getItemSrcSet(imgIndex)"
+                          :sizes="getItemSizes(imgIndex)"
+                          draggable="false"
+                          :alt="getItemAlt(imgIndex)"
 
-                
-                <div v-show="imageLoading" class="cool-lightbox-loading-wrapper">
-                  <slot name="loading">
-                    <div class="cool-lightbox-loading"></div>
-                  </slot>
+                          @load="imageLoaded"
+                      />
+                    </picture>
+                  </transition>
+
+                  
+                  <div v-show="imageLoading" class="cool-lightbox-loading-wrapper">
+                    <slot name="loading">
+                      <div class="cool-lightbox-loading"></div>
+                    </slot>
+                  </div>
+                  <!--/loading-wrapper-->
                 </div>
-                <!--/loading-wrapper-->
-              </div>
-              <!--/imgs-slide-->
-            
-              <div v-else key="video" class="cool-lightbox__iframe">
-                <transition name="cool-lightbox-slide-change" mode="out-in">
-                  <iframe
-                    class="cool-lightbox-video" 
-                    v-autoplayObserver
-                    :data-autoplay="setAutoplay(imgIndex)"
-                    :src="getVideoUrl(getItemSrc(imgIndex))" 
-                    v-if="(!checkIsMp4(getItemSrc(imgIndex)) && getMediaType(imgIndex) === 'video')" 
-                    :style="aspectRatioVideo" 
-                    :key="getVideoUrl(getItemSrc(imgIndex))" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-                    allowfullscreen>
-                  </iframe>
+                <!--/imgs-slide-->
+              
+                <div v-else key="video" class="cool-lightbox__iframe">
+                  <transition name="cool-lightbox-slide-change" mode="out-in">
+                    <iframe
+                      class="cool-lightbox-video" 
+                      v-autoplayObserver
+                      :data-autoplay="setAutoplay(imgIndex)"
+                      :src="getVideoUrl(getItemSrc(imgIndex))" 
+                      v-if="(!checkIsMp4(getItemSrc(imgIndex)) && getMediaType(imgIndex) === 'video')" 
+                      :style="aspectRatioVideo" 
+                      :key="getVideoUrl(getItemSrc(imgIndex))" 
+                      frameborder="0" 
+                      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+                      style="width: 100%;max-height: 70vh;"
+                      allowfullscreen>
+                    </iframe>
 
-                  <iframe
-                    class="cool-lightbox-pdf" 
-                    :src="getItemSrc(imgIndex)" 
-                    v-if="(getMediaType(imgIndex) === 'iframe') || (getPDFurl(getItemSrc(imgIndex)))"
-                    :key="imgIndex" 
-                    frameborder="0" 
-                    allowfullscreen>
-                  </iframe>
+                    <iframe
+                      class="cool-lightbox-pdf" 
+                      :src="getItemSrc(imgIndex)" 
+                      v-if="(getMediaType(imgIndex) === 'iframe') || (getPDFurl(getItemSrc(imgIndex)))"
+                      :key="imgIndex" 
+                      frameborder="0" 
+                      allowfullscreen>
+                    </iframe>
 
-                  <video class="cool-lightbox-video" 
-                    v-autoplayObserver
-                    :data-autoplay="setAutoplay(imgIndex)"
-                    v-if="checkIsMp4(getItemSrc(imgIndex)) || getMediaType(imgIndex) === 'webVideo'" 
-                    :style="aspectRatioVideo" :key="checkIsMp4(getItemSrc(imgIndex))" 
-                    controls="" 
-                    controlslist="nodownload" 
-                    poster="">
-                    <source :src="checkIsMp4(getItemSrc(imgIndex))" :type="'video/'+(getVideoExt(getItemSrc(imgIndex)) ? getVideoExt(getItemSrc(imgIndex)) : getExtFromItem(imgIndex))">
-                    Sorry, your browser doesn't support embedded videos
-                  </video> 
-                </transition>
-              </div>
-              <!--/cool-lightbox__iframe-->
+                    <video class="cool-lightbox-video" 
+                      v-autoplayObserver
+                      :data-autoplay="setAutoplay(imgIndex)"
+                      v-if="checkIsMp4(getItemSrc(imgIndex)) || getMediaType(imgIndex) === 'webVideo'" 
+                      :style="aspectRatioVideo" :key="checkIsMp4(getItemSrc(imgIndex))" 
+                      controls="" 
+                      controlslist="nodownload" 
+                      style="width: 100%;max-height: 70vh;"
+                      poster="">
+                      <source :src="checkIsMp4(getItemSrc(imgIndex))" :type="'video/'+(getVideoExt(getItemSrc(imgIndex)) ? getVideoExt(getItemSrc(imgIndex)) : getExtFromItem(imgIndex))">
+                      Sorry, your browser doesn't support embedded videos
+                    </video> 
+                  </transition>
+                </div>
+                <!--/cool-lightbox__iframe-->
 
-            </transition>
+              </transition>
+            </div>
           </div>
           <!--/cool-lightbox__slide-->
         </div>
@@ -1471,7 +1475,7 @@ export default {
     },
   },
   mounted() {
-    console.log('Init Cool Lightbox! V1')
+    console.log('Init Cool Lightbox! V2.0')
   },
 };
 </script>
