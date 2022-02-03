@@ -33,33 +33,9 @@
       <div 
         class="cool-lightbox__inner" 
         :style="innerStyles"
-
-        @mousedown="startSwipe" 
-        @mousemove="continueSwipe"
-        @mouseup="endSwipe"
-        @touchstart="startSwipe"
-        @touchmove="continueSwipe"
-        @touchend="endSwipe"
         >
         <div class="cool-lightbox__progressbar" :style="stylesInterval"></div>
 
-        <div class="cool-lightbox__navigation">
-          <button type="button" class="cool-lightbox-button cool-lightbox-button--prev" title="Previous" :class="buttonsClasses" v-show="(hasPreviousButton || loopData) && items.length > 1" @click="onPrevClick">
-            <slot name="icon-previous">
-              <div class="cool-lightbox-button__icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11.28 15.7l-1.34 1.37L5 12l4.94-5.07 1.34 1.38-2.68 2.72H19v1.94H8.6z"></path></svg>
-              </div>
-            </slot>
-          </button>
-
-          <button type="button" class="cool-lightbox-button cool-lightbox-button--next" title="Next" :class="buttonsClasses" v-show="(hasNextButton || loopData) && items.length > 1" @click="onNextClick(false)">
-            <slot name="icon-next">
-              <div class="cool-lightbox-button__icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.4 12.97l-2.68 2.72 1.34 1.38L19 12l-4.94-5.07-1.34 1.38 2.68 2.72H5v1.94z"></path></svg>
-              </div>
-            </slot>
-          </button>
-        </div>
         <!--/cool-lightbox__navigation-->
 
         <div v-if="effect === 'swipe'" 
@@ -89,14 +65,6 @@
                   :alt="getItemAlt(itemIndex)"
 
                   @load="imageLoaded"
-                  @click="zoomImage(itemIndex)"
-                  @mousedown="handleMouseDown($event)"
-                  @mouseup="handleMouseUp($event)"
-                  @mousemove="handleMouseMove($event)"
-
-                  @touchstart="handleMouseDown($event)"
-                  @touchmove="handleMouseMove($event)"
-                  @touchend="handleMouseUp($event)"
                   />
                 <picture :key="itemIndex" v-else>
                   <source
@@ -115,14 +83,6 @@
                       :alt="getItemAlt(itemIndex)"
 
                       @load="imageLoaded"
-                      @click="zoomImage(itemIndex)"
-                      @mousedown="handleMouseDown($event)"
-                      @mouseup="handleMouseUp($event)"
-                      @mousemove="handleMouseMove($event)"
-
-                      @touchstart="handleMouseDown($event)"
-                      @touchmove="handleMouseMove($event)"
-                      @touchend="handleMouseUp($event)"
                   />
                 </picture>
                 
@@ -195,10 +155,6 @@
                       :alt="getItemAlt(imgIndex)"
 
                       @load="imageLoaded"
-                      @click="zoomImage"
-                      @mousedown="handleMouseDown($event)"
-                      @mouseup="handleMouseUp($event)"
-                      @mousemove="handleMouseMove($event)"
                   />
                 </transition>
                 <transition v-else name="cool-lightbox-slide-change" mode="out-in">
@@ -219,10 +175,6 @@
                         :alt="getItemAlt(imgIndex)"
 
                         @load="imageLoaded"
-                        @click="zoomImage(imgIndex)"
-                        @mousedown="handleMouseDown($event)"
-                        @mouseup="handleMouseUp($event)"
-                        @mousemove="handleMouseMove($event)"
                     />
                   </picture>
                 </transition>
@@ -296,28 +248,6 @@
         </transition>
         
         <div class="cool-lightbox-toolbar" :class="buttonsClasses">
-          
-          <button type="button" v-if="this.slideshow && items.length > 1" title="Play slideshow" class="cool-lightbox-toolbar__btn" @click="togglePlaySlideshow">
-            <svg xmlns="http://www.w3.org/2000/svg" v-if="!isPlayingSlideShow" viewBox="0 0 24 24">
-              <path d="M6.5 5.4v13.2l11-6.6z"></path>
-            </svg>
-
-            <svg v-else xmlns="http://www.w3.org/2000/svg">
-              <g>
-                <rect id="svg_4" height="11.97529" width="11.728392" y="6.030873" x="6.259265" stroke-width="1.5" stroke="#000" fill="#000000"/>
-              </g>
-            </svg>
-          </button>
-
-          <button type="button" @click="showThumbs = !showThumbs" title="Show thumbnails" v-if="items.length > 1 && gallery" class="cool-lightbox-toolbar__btn">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path d="M14.59 14.59h3.76v3.76h-3.76v-3.76zm-4.47 
-              0h3.76v3.76h-3.76v-3.76zm-4.47 0h3.76v3.76H5.65v-3.76zm8.94-4.47h3.76v3.76h-3.76v-3.76zm-4.47 
-              0h3.76v3.76h-3.76v-3.76zm-4.47 0h3.76v3.76H5.65v-3.76zm8.94-4.47h3.76v3.76h-3.76V5.65zm-4.47 
-              0h3.76v3.76h-3.76V5.65zm-4.47 0h3.76v3.76H5.65V5.65z">
-              </path>
-            </svg>
-          </button>
 
           <button type="button" @click="Download()" title="Download" class="cool-lightbox-toolbar__btn">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -560,19 +490,6 @@ export default {
   },
 
   watch: {
-    zoomBar(newVal, prevVal) {
-      let item;
-      if(this.isZooming) {
-        if(this.effect == 'swipe') {
-          item = this.$refs.items[this.imgIndex].childNodes[0]
-        } else {
-          item = this.$refs.items.childNodes[0]
-        }
-
-        const newZoom = 1.6 + newVal/10;
-        item.style.transform  = 'translate3d(calc(-50% + '+this.left+'px), calc(-50% + '+this.top+'px), 0px) scale3d('+newZoom+', '+newZoom+', '+newZoom+')';
-      }
-    },
 
     showThumbs(prev, val) {
       let widthGalleryBlock = 212;
@@ -746,13 +663,6 @@ export default {
           }
         }
 
-        // reset zoom
-        this.resetZoom()
-
-        // reset swipe type
-        this.swipeType = null
-        this.ySwipeWrapper = 0
-
       })
     }, 
   },
@@ -903,203 +813,6 @@ export default {
       }
 
       return false
-    },
-
-    // start swipe event
-    startSwipe(event) {
-      if(this.isZooming) {
-        return false;
-      }
-
-      // check if is some button
-      if(this.checkIfIsButton(event)) {
-        return false;
-      }
-
-      // clear interval
-      clearInterval(this.swipeInterval)
-      this.swipeAnimation = null
-
-      // starts swipe
-      this.isDraggingSwipe = true
-      this.initialMouseX = this.getMouseXPosFromEvent(event);
-      this.initialMouseY = this.getMouseYPosFromEvent(event);
-    },
-
-    // continue swipe event
-    continueSwipe(event) {
-      if(this.isDraggingSwipe) {
-        this.IsSwipping = true
-        const currentPosX = this.getMouseXPosFromEvent(event)
-        const currentPosY = this.getMouseYPosFromEvent(event)
-        const windowWidth = this.lightboxInnerWidth
-
-        // diffs
-        const diffX = Math.abs(currentPosX - this.initialMouseX)
-        const diffY = Math.abs(currentPosY - this.initialMouseY)
-
-        // swipe type
-        if(this.swipeType == null) {
-          if(diffY > 5 || diffX > 5) {
-            if(diffY > diffX) {
-              this.swipeType = 'v'
-            } else {
-              this.swipeType = 'h'
-            }
-          }
-        }
-
-        // swipe
-        if(this.swipeType == 'h') {
-          // swipe wrapper
-          if(this.dir === 'rtl') {
-            this.xSwipeWrapper = (windowWidth*this.imgIndex) + currentPosX - this.initialMouseX + 30*this.imgIndex
-          } else {
-            this.xSwipeWrapper = -(windowWidth*this.imgIndex) + currentPosX - this.initialMouseX - 30*this.imgIndex
-          }
-
-        } else {
-          this.ySwipeWrapper = currentPosY - this.initialMouseY
-        }
-
-        // mobile caseS
-        if(event.type === 'touchmove') {
-          this.endMouseX = this.getMouseXPosFromEvent(event);
-          this.endMouseY = this.getMouseYPosFromEvent(event);
-        }
-      }
-    },
-
-    // end swipe event
-    endSwipe(event) {
-      if(this.checkIfIsButton(event) && this.initialMouseX === 0) {
-        return false;
-      }
-
-      // event check is dragging and swipe
-      const self = this
-      const swipeType = this.swipeType
-      this.isDraggingSwipe = false
-      
-      // horizontal swipe type
-      if(this.initialMouseX === 0 && swipeType == 'h') {
-        return false
-      }
-
-      // touch end fixes
-      if(event.type !== 'touchend') {
-        this.endMouseX = this.getMouseXPosFromEvent(event);
-        this.endMouseY = this.getMouseYPosFromEvent(event);
-      } else {
-        if(this.endMouseX === 0) {
-          return;
-        }
-      }
-
-      // check if is dragged 
-      if(
-        ((this.endMouseX - this.initialMouseX === 0) && swipeType == 'h') || 
-        this.isZooming ||
-        ((this.endMouseY - this.initialMouseY === 0) && swipeType == 'v')
-      ) {
-        return;
-      } 
-      
-      // set swipe animation
-      this.setSwipeAnimation()
-
-      // reset swipe data
-      setTimeout(function() {
-        self.IsSwipping = false
-        self.initialMouseX = 0
-        self.endMouseX = 0
-      }, 10)
-
-      // type of swipe
-      if(this.swipeType === 'h') {
-
-        // if the swipe is to the right
-        if((this.endMouseX - this.initialMouseX) < -40) {
-          if(this.dir === 'rtl') {
-            return this.swipeToLeft()
-          }
-          return this.swipeToRight()
-        } 
-
-        // if the swipe is to the left
-        if((this.endMouseX - this.initialMouseX) > 40) {
-          if(this.dir === 'rtl') {
-            return this.swipeToRight()
-          }
-          return this.swipeToLeft();
-        }
-      }
-
-
-      if(this.swipeType === 'v') {
-        const diffY = Math.abs(this.endMouseY - this.initialMouseY)
-
-        // diff Y
-        if(diffY >= 90) {
-          this.close()
-        } else {
-          this.ySwipeWrapper = 0
-        }
-      } 
-      
-      this.swipeType = null
-      const windowWidth = this.lightboxInnerWidth
-
-      if(this.dir === 'rtl') {
-        this.xSwipeWrapper = this.imgIndex*windowWidth + 30*this.imgIndex
-        return;
-      }
-
-      this.xSwipeWrapper = -this.imgIndex*windowWidth - 30*this.imgIndex
-    },
-    
-    // swipe to left effect
-    swipeToLeft() {
-      if(!this.hasPrevious && this.effect === 'swipe') {
-
-        if(this.dir === 'rtl') {
-          return this.xSwipeWrapper = this.imgIndex*this.lightboxInnerWidth + 30*this.imgIndex
-        }
-
-        return this.xSwipeWrapper = -this.imgIndex*this.lightboxInnerWidth - 30*this.imgIndex
-      }
-
-      this.changeIndexToPrev()
-    },
-    
-    // swipe to right effect
-    swipeToRight() {
-      if(!this.hasNext && this.effect === 'swipe') {
-
-        if(this.dir === 'rtl') {
-          return this.xSwipeWrapper = this.imgIndex*this.lightboxInnerWidth + 30*this.imgIndex
-        }
-
-        return this.xSwipeWrapper = -this.imgIndex*this.lightboxInnerWidth - 30*this.imgIndex
-      }
-
-      this.changeIndexToNext()
-    },
-
-    // function that return x position from event
-    getMouseXPosFromEvent(event) {
-      if(event.type.indexOf('mouse') !== -1){
-          return event.clientX;
-      }
-      return event.touches[0].clientX;
-    },
-    
-    // function that return Y position from event
-    getMouseYPosFromEvent(event) {
-      if(event.type.indexOf('mouse') !== -1){
-          return event.clientY;
-      }
-      return event.touches[0].clientY;
     },
 
     // check if the image is cached
@@ -1343,144 +1056,7 @@ export default {
       return button === 0
     },
 
-    // handle mouse down event
-    handleMouseDown(e) {
-      if (!this.checkMouseEventPropButton(e.button)) return
-      this.lastX = e.clientX
-      this.lastY = e.clientY
-      this.isDraging = true
-      e.stopPropagation()
-    },
-
-    // handle mouse up event
-    handleMouseUp(e) {
-      if (!this.checkMouseEventPropButton(e.button)) return
-      this.isDraging = false
-      this.lastX = this.lastY = 0
-
-      // Fix drag zoom out
-      const thisContext = this
-      setTimeout(function() {
-        thisContext.canZoom = true
-      }, 100)
-    },
-
-    // handle mouse move event
-    handleMouseMove(e) {
-      if (!this.checkMouseEventPropButton(e.button)) return
-      if (this.isDraging) {
-        this.top = this.top - this.lastY + e.clientY
-        this.left = this.left - this.lastX + e.clientX
-        this.lastX = e.clientX
-        this.lastY = e.clientY
-        this.canZoom = false
-        
-        const item = e.target.parentNode.nodeName === 'PICTURE'
-            ? e.target.parentNode.parentNode
-            : e.target.parentNode
-        const newZoom = 1.6 + this.zoomBar/10;
-        item.style.transform  = 'translate3d(calc(-50% + '+this.left+'px), calc(-50% + '+this.top+'px), 0px) scale3d('+newZoom+', '+newZoom+', '+newZoom+')';
-      }
-      e.stopPropagation()
-    },
-
-    // zoom image event
-    zoomImage(indexImage) {
-      if(this.disableZoom) {
-        return false
-      }
-
-      if(window.innerWidth < 700) {
-        return false
-      }
-
-      if(!this.canZoom) {
-        return false
-      }
-
-      if(this.IsSwipping) {
-        return false
-      }
-
-      // item zoom
-      let item;
-      if(this.effect == 'swipe') {
-        item = this.$refs.items[this.imgIndex].childNodes[0]
-      } else {
-        item = this.$refs.items.childNodes[0]
-      }
-      
-      // zoom variables
-      const isZooming = this.isZooming
-      const thisContext = this
-
-      // Is zooming check
-      if(isZooming) {
-        if(!this.isDraging) { 
-          this.isZooming = false
-          this.zoomBar = 0
-        }
-      } else {
-        this.isZooming = true
-      }
-
-      // check if is zooming
-      if(this.isZooming) {
-        this.stopSlideShow()
-
-        // add scale
-        item.style.transform  = 'translate3d(calc(-50%), calc(-50%), 0px) scale3d(1.6, 1.6, 1.6)';
-
-        // hide buttons
-        this.buttonsVisible = false
-
-        // fix drag transition problems
-        setTimeout(function() {
-          thisContext.transition = 'all .0s ease'
-        }, 100)
-
-      } else {
-
-        // show buttons 
-        this.buttonsVisible = true
-        this.resetZoom()
-      }
-    },
-
-    // Reset zoom data
-    resetZoom() {
-      this.scale = 1
-      this.left = 0
-      this.top = 0
-      this.zoomBar = 0
-      this.isZooming = false
-      this.swipeType = null
-      this.transition = 'all .3s ease'
-
-      // only if index is not null
-      if(this.imgIndex != null) {
-        
-        let item;
-        if(this.effect == 'swipe') {
-          item = this.$refs.items[this.imgIndex].childNodes[0]
-        } else {
-          item = this.$refs.items.childNodes[0]
-        }
-
-        // reset styles
-        if(this.disableZoom) {
-          item.style.transform  = 'translate3d(calc(-50% + '+this.left+'px), calc(-50% + '+this.top+'px), 0px)';
-        } else {
-          item.style.transform  = 'translate3d(calc(-50% + '+this.left+'px), calc(-50% + '+this.top+'px), 0px) scale3d(1, 1, 1)';
-        }
-
-        this.initialMouseX = 0
-        if(window.innerWidth >= 700) {
-          this.buttonsVisible = true
-        }
-      }
-    },
-
+  
     // Aspect Ratio responsive video
     setAspectRatioVideo() {
       const thisContext = this
@@ -1514,7 +1090,6 @@ export default {
     // close event
     close() {
       this.stopSlideShow();
-      this.swipeType = null;
       this.$emit("close", this.imgIndex);
       this.showThumbs = false;
       this.imgIndex = null;
@@ -1556,21 +1131,6 @@ export default {
       }
     },
 
-    // set swipe animation
-    setSwipeAnimation() {
-      const self = this
-      clearInterval(this.swipeInterval)
-      this.swipeAnimation = null
-
-      // animation swipe
-      this.swipeAnimation = 'all .3s ease';
-      this.swipeInterval = setInterval(interval, 330);
-
-      function interval() {
-        self.swipeAnimation = null
-      }
-    },
-
     // next slide event
     onNextClick(isFromSlideshow = false) {
       if(this.isZooming) {
@@ -1581,7 +1141,6 @@ export default {
         this.stopSlideShow()
       }
 
-      this.setSwipeAnimation()
 
       if(this.dir === 'rtl') {
         return this.changeIndexToPrev();
@@ -1600,8 +1159,6 @@ export default {
         this.stopSlideShow()
       }
       
-      this.setSwipeAnimation()
-
       if(this.dir === 'rtl') {
         return this.changeIndexToNext();
       }
@@ -1914,7 +1471,7 @@ export default {
     },
   },
   mounted() {
-    console.log('Init Cool Lightbox! V0')
+    console.log('Init Cool Lightbox! V1')
   },
 };
 </script>
