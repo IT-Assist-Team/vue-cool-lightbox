@@ -76,99 +76,101 @@
             class="cool-lightbox__slide"
             :class="{ 'cool-lightbox__slide--current': itemIndex === imgIndex }"
           >
-            <div 
-                v-lazyload
-                v-if="getMediaType(itemIndex) === 'image'" key="image" :style="imgWrapperStyle" class="cool-lightbox__slide__img">
-              <img v-if="!isItemPicture(itemIndex)"
-                :data-src="getItemSrc(itemIndex)"
-                :data-srcset="getItemSrcSet(itemIndex)"
-                :data-sizes="getItemSizes(itemIndex)"
-                :key="itemIndex"
-                draggable="false"
-                :alt="getItemAlt(itemIndex)"
+            <div v-if="itemIndex === imgIndex">
+              <div 
+                  v-lazyload
+                  v-if="getMediaType(itemIndex) === 'image'" key="image" :style="imgWrapperStyle" class="cool-lightbox__slide__img">
+                <img v-if="!isItemPicture(itemIndex)"
+                  :data-src="getItemSrc(itemIndex)"
+                  :data-srcset="getItemSrcSet(itemIndex)"
+                  :data-sizes="getItemSizes(itemIndex)"
+                  :key="itemIndex"
+                  draggable="false"
+                  :alt="getItemAlt(itemIndex)"
 
-                @load="imageLoaded"
-                @click="zoomImage(itemIndex)"
-                @mousedown="handleMouseDown($event)"
-                @mouseup="handleMouseUp($event)"
-                @mousemove="handleMouseMove($event)"
+                  @load="imageLoaded"
+                  @click="zoomImage(itemIndex)"
+                  @mousedown="handleMouseDown($event)"
+                  @mouseup="handleMouseUp($event)"
+                  @mousemove="handleMouseMove($event)"
 
-                @touchstart="handleMouseDown($event)"
-                @touchmove="handleMouseMove($event)"
-                @touchend="handleMouseUp($event)"
-                />
-              <picture :key="itemIndex" v-else>
-                <source
-                    v-for="(source, sourceIndex) in getPictureSources(itemIndex)"
-                    :data-srcset="source.srcset"
-                    :data-media="source.media"
-                    :type="source.type"
-                    :data-sizes="source.sizes || getItemSizes(imgIndex)"
-                    :key="`source-${imgIndex}-${sourceIndex}`"
-                >
-                <img
-                     :data-src="getItemSrc(itemIndex)"
-                     :data-srcset="getItemSrcSet(itemIndex)"
-                     :data-sizes="getItemSizes(itemIndex)"
-                     draggable="false"
-                     :alt="getItemAlt(itemIndex)"
+                  @touchstart="handleMouseDown($event)"
+                  @touchmove="handleMouseMove($event)"
+                  @touchend="handleMouseUp($event)"
+                  />
+                <picture :key="itemIndex" v-else>
+                  <source
+                      v-for="(source, sourceIndex) in getPictureSources(itemIndex)"
+                      :data-srcset="source.srcset"
+                      :data-media="source.media"
+                      :type="source.type"
+                      :data-sizes="source.sizes || getItemSizes(imgIndex)"
+                      :key="`source-${imgIndex}-${sourceIndex}`"
+                  >
+                  <img
+                      :data-src="getItemSrc(itemIndex)"
+                      :data-srcset="getItemSrcSet(itemIndex)"
+                      :data-sizes="getItemSizes(itemIndex)"
+                      draggable="false"
+                      :alt="getItemAlt(itemIndex)"
 
-                     @load="imageLoaded"
-                     @click="zoomImage(itemIndex)"
-                     @mousedown="handleMouseDown($event)"
-                     @mouseup="handleMouseUp($event)"
-                     @mousemove="handleMouseMove($event)"
+                      @load="imageLoaded"
+                      @click="zoomImage(itemIndex)"
+                      @mousedown="handleMouseDown($event)"
+                      @mouseup="handleMouseUp($event)"
+                      @mousemove="handleMouseMove($event)"
 
-                     @touchstart="handleMouseDown($event)"
-                     @touchmove="handleMouseMove($event)"
-                     @touchend="handleMouseUp($event)"
-                />
-              </picture>
-              
-              <div v-show="imageLoading" class="cool-lightbox-loading-wrapper">
-                <slot name="loading">
-                  <div class="cool-lightbox-loading"></div>
-                </slot>
+                      @touchstart="handleMouseDown($event)"
+                      @touchmove="handleMouseMove($event)"
+                      @touchend="handleMouseUp($event)"
+                  />
+                </picture>
+                
+                <div v-show="imageLoading" class="cool-lightbox-loading-wrapper">
+                  <slot name="loading">
+                    <div class="cool-lightbox-loading"></div>
+                  </slot>
+                </div>
+                <!--/loading-wrapper-->
               </div>
-              <!--/loading-wrapper-->
-            </div>
-            <!--/imgs-slide-->
-          
-            <div v-else key="video" class="cool-lightbox__iframe">
-              <iframe
-                class="cool-lightbox-video" 
-                v-autoplayObserver
-                :data-autoplay="setAutoplay(itemIndex)"
-                :src="getVideoUrl(getItemSrc(itemIndex))" 
-                v-if="(!checkIsMp4(getItemSrc(itemIndex)) && getMediaType(itemIndex) === 'video')" 
-                :style="aspectRatioVideo" 
-                :key="itemIndex" 
-                frameborder="0" 
-                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-                allowfullscreen>
-              </iframe>
+              <!--/imgs-slide-->
+            
+              <div v-else key="video" class="cool-lightbox__iframe">
+                <iframe
+                  class="cool-lightbox-video" 
+                  v-autoplayObserver
+                  :data-autoplay="setAutoplay(itemIndex)"
+                  :src="getVideoUrl(getItemSrc(itemIndex))" 
+                  v-if="(!checkIsMp4(getItemSrc(itemIndex)) && getMediaType(itemIndex) === 'video')" 
+                  :style="aspectRatioVideo" 
+                  :key="itemIndex" 
+                  frameborder="0" 
+                  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+                  allowfullscreen>
+                </iframe>
 
-              <iframe
-                class="cool-lightbox-pdf" 
-                :src="getItemSrc(itemIndex)" 
-                v-if="(getMediaType(itemIndex) === 'iframe') || (getPDFurl(getItemSrc(itemIndex)))" 
-                :key="itemIndex" 
-                frameborder="0" 
-                allowfullscreen>
-              </iframe>
+                <iframe
+                  class="cool-lightbox-pdf" 
+                  :src="getItemSrc(itemIndex)" 
+                  v-if="(getMediaType(itemIndex) === 'iframe') || (getPDFurl(getItemSrc(itemIndex)))" 
+                  :key="itemIndex" 
+                  frameborder="0" 
+                  allowfullscreen>
+                </iframe>
 
-              <video 
-                v-autoplayObserver
-                :data-autoplay="setAutoplay(itemIndex)"
-                class="cool-lightbox-video" 
-                v-if="checkIsMp4(getItemSrc(itemIndex)) || getMediaType(itemIndex) === 'webVideo'" 
-                :style="aspectRatioVideo" :key="checkIsMp4(getItemSrc(itemIndex))" 
-                controls="" 
-                controlslist="nodownload" l
-                poster="">
-                <source :src="checkIsMp4(getItemSrc(itemIndex))" :type="'video/'+(getVideoExt(getItemSrc(itemIndex)) ? getVideoExt(getItemSrc(itemIndex)) : getExtFromItem(itemIndex))">
-                Sorry, your browser doesn't support embedded videos
-              </video> 
+                <video 
+                  v-autoplayObserver
+                  :data-autoplay="setAutoplay(itemIndex)"
+                  class="cool-lightbox-video" 
+                  v-if="checkIsMp4(getItemSrc(itemIndex)) || getMediaType(itemIndex) === 'webVideo'" 
+                  :style="aspectRatioVideo" :key="checkIsMp4(getItemSrc(itemIndex))" 
+                  controls="" 
+                  controlslist="nodownload" l
+                  poster="">
+                  <source :src="checkIsMp4(getItemSrc(itemIndex))" :type="'video/'+(getVideoExt(getItemSrc(itemIndex)) ? getVideoExt(getItemSrc(itemIndex)) : getExtFromItem(itemIndex))">
+                  Sorry, your browser doesn't support embedded videos
+                </video> 
+              </div>
             </div>
             <!--/cool-lightbox__iframe-->
           </div>
@@ -1707,18 +1709,6 @@ export default {
       if(mp4Url) {
         return mp4Url
       }
-      
-      const youtubeUrl = this.getYoutubeUrl(itemSrc)
-      if(youtubeUrl) {
-        return youtubeUrl
-      }
-
-      const vimeoUrl = this.getVimeoUrl(itemSrc)
-      if(vimeoUrl) {
-        return vimeoUrl
-      }
-
-      
 
       return false
     },
@@ -1922,7 +1912,10 @@ export default {
     hasPrevious() {
       return (this.imgIndex - 1 >= 0)
     },
-  }
+  },
+  mounted() {
+    console.log('Init Cool Lightbox! V0')
+  },
 };
 </script>
 
