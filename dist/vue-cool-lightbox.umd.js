@@ -544,6 +544,7 @@
           withCredentials: true,
         }).then(function (response) {
           this$1.close();
+          this$1.$emit("deleted");
         });
       },
       getExtFromItem: function getExtFromItem(imgIndex) {
@@ -1394,7 +1395,7 @@
     /* scoped */
     var __vue_scope_id__ = undefined;
     /* module identifier */
-    var __vue_module_identifier__ = "data-v-2e7775f5";
+    var __vue_module_identifier__ = "data-v-2da2d59e";
     /* functional template */
     var __vue_is_functional_template__ = false;
     /* style inject */

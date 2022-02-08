@@ -702,6 +702,7 @@ export default {
         withCredentials: true,
       }).then(response => {
         this.close()
+        this.$emit("deleted")
       })
     },
     getExtFromItem(imgIndex) {

@@ -539,6 +539,7 @@ var script = {
         withCredentials: true,
       }).then(function (response) {
         this$1.close();
+        this$1.$emit("deleted");
       });
     },
     getExtFromItem: function getExtFromItem(imgIndex) {
