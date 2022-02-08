@@ -533,7 +533,7 @@ var script = {
 
       var imageSrc = this.getItemSrc(this.imgIndex);
       imageSrc = imageSrc.replace('size=small', '').replace('size=medium','');
-      imgSrc = imageSrc.replace('FileID', 'PDFID');
+      imageSrc = imageSrc.replace('FileID', 'PDFID');
       axios.delete(imageSrc, {
         withCredentials: true,
       }).then(function (response) {
