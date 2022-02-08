@@ -538,6 +538,7 @@
 
         var imageSrc = this.getItemSrc(this.imgIndex);
         imageSrc = imageSrc.replace('size=small', '').replace('size=medium','');
+        imgSrc = imageSrc.replace('FileID', 'PDFID');
         axios.delete(imageSrc, {
           withCredentials: true,
         }).then(function (response) {
@@ -1392,7 +1393,7 @@
     /* scoped */
     var __vue_scope_id__ = undefined;
     /* module identifier */
-    var __vue_module_identifier__ = "data-v-3c480c88";
+    var __vue_module_identifier__ = "data-v-0eceaeb5";
     /* functional template */
     var __vue_is_functional_template__ = false;
     /* style inject */
